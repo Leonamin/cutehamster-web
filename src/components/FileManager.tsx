@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { uploadFile, getFileList, downloadFile, FileResponse } from "../api/fileApi";
+import { API_BASE_URL } from "../config";
 
 const FileManager: React.FC = () => {
+
   const [files, setFiles] = useState<FileResponse[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [downloadLink, setDownloadLink] = useState<string | null>(null);
 
   // 파일 업로드 핸들러
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -11,8 +15,8 @@ const FileManager: React.FC = () => {
       const file = acceptedFiles[0];
       try {
         const response = await uploadFile(file);
-        alert(`업로드 성공: ${response.original}`);
-        fetchFiles();
+        setDownloadLink(`${API_BASE_URL}/download/${response.stored}`); // 다운로드 링크 설정
+        setIsModalOpen(true); // 모달 열기
       } catch (error) {
         alert("파일 업로드 실패");
         console.error(error);
@@ -60,6 +64,35 @@ const FileManager: React.FC = () => {
           </ul>
         )}
       </div>
+      {/* 업로드 성공 모달 */}
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>업로드 성공!</h3>
+            {downloadLink && (
+              <>
+                <p>
+                  <button onClick={() => {
+                    window.open(downloadLink, '_blank');
+                  }}>
+                    업로드한 파일 다운로드
+                  </button>
+                </p>
+                <p>
+                  <button onClick={() => {
+                    navigator.clipboard.writeText(downloadLink);
+                    alert('링크가 복사되었습니다!');
+                  }}>
+                    링크 복사
+                  </button>
+                </p>
+              </>
+            )}
+            <button onClick={() => setIsModalOpen(false)}>닫기</button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
