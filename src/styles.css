@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto 0;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropzone {
+  width: 50%;
+  height: 100px;
+  border: 2px dashed #ccc;
+  padding: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropzone.active {
+  background-color: #f0f8ff;
+}
+
+.file-list {
+  margin-top: 20px;
+}
+
+.file-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.file-list li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.file-list li:hover {
+  background-color: #f5f5f5;
+}
+
+.upload-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-content a {
+  color: blue;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
