@@ -1,0 +1,28 @@
+.container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    padding: 20px 12px;
+    gap: 20px;
+}
+
+.dropzoneContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    min-height: 200px;
+}
+
+.dropzoneWrapper {
+    flex-grow: 1;
+}
+
+@media (max-width: 768px) {
+    .dropzoneContainer {
+        width: 100%;
+        min-height: 100px;
+    }
+}

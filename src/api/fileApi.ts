@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://api-cutehamster.cuteshrew.com:8080"; // 백엔드 서버 주소
+const API_URL = "http://api-cutehamster.cuteshrew.com"; // 백엔드 서버 주소
 
 export interface FileResponse {
   original: string;
