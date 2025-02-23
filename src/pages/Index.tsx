@@ -4,6 +4,8 @@ import styles from "./Index.module.css";
 import { useDropzone } from "react-dropzone";
 import Divider from "../components/layout/Divider";
 import DropZone from "../components/Dropzone/DropZone";
+import { toast } from "sonner";
+import { FILE_DOWNLOAD_URL } from "../config";
 
 
 const Index: React.FC = () => {
@@ -14,13 +16,19 @@ const Index: React.FC = () => {
             const file = acceptedFiles[0];
             try {
                 const response = await uploadFile(file);
-                alert(`업로드 성공: ${response.original}`);
+                toast(`파일 업로드 성공! 다운로드 URL이 복사되었습니다.`);
+                copyDownloadUrl(response);
+                setFiles((prev) => [...prev, response]);
             } catch (error) {
-                alert("파일 업로드 실패");
+                toast("파일 업로드 실패");
                 console.error(error);
             }
         }
     }, []);
+
+    const copyDownloadUrl = (file: FileResponse) => {
+        navigator.clipboard.writeText(`${FILE_DOWNLOAD_URL}/${file.stored}`);
+    }
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
