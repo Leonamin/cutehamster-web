@@ -5,10 +5,10 @@ import { Toaster } from 'sonner';
 
 const App: React.FC = () => {
   return (
-    <div>
+    <>
       <Toaster />
       <Index />
-    </div>
+    </>
   );
 };
 

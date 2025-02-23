@@ -1,45 +1,67 @@
-import { useCallback, useState } from "react";
-import { FileResponse, uploadFile } from "../api/fileApi";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./Index.module.css";
 import { useDropzone } from "react-dropzone";
 import Divider from "../components/layout/Divider";
 import DropZone from "../components/Dropzone/DropZone";
-import { toast } from "sonner";
-import { FILE_DOWNLOAD_URL } from "../config";
+import useFileUpload from "../hooks/useFileUpload";
+import UploadedFile from "../0_models/UploadedFile";
+import { toYYYYMMDD } from "../utils/dateUtils";
+import { toFileSize } from "../utils/fileUtils";
 
+
+interface FileItemProps {
+    file: UploadedFile,
+    onClickFile: (file: UploadedFile) => void
+}
+
+const FileItem = ({
+    file,
+    onClickFile
+}: FileItemProps) => (
+    <div className={styles.fileItemTile}>
+        <div className={styles.fileItemInfo}>
+            <span className={styles.fileNameSpan}>
+                {file.fileName}
+            </span>
+            <span className={styles.fileSizeSpan}>
+                {toFileSize(file.size)}
+            </span>
+            <span className={styles.fileCreatedAtSpan}>
+                {toYYYYMMDD(file.createdAt)}
+            </span>
+        </div>
+        <button className={styles.fileUrlCopyButton} onClick={() => onClickFile(file)}>다운로드 URL</button>
+    </div>
+)
 
 const Index: React.FC = () => {
-    const [files, setFiles] = useState<FileResponse[]>([]);
+    const { files, initializeFiles, copyDownloadUrl, handleUploadFile } = useFileUpload();
+
+    useEffect(() => {
+        initializeFiles();
+    }, [])
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
             const file = acceptedFiles[0];
-            try {
-                const response = await uploadFile(file);
-                toast(`파일 업로드 성공! 다운로드 URL이 복사되었습니다.`);
-                copyDownloadUrl(response);
-                setFiles((prev) => [...prev, response]);
-            } catch (error) {
-                toast("파일 업로드 실패");
-                console.error(error);
-            }
+            handleUploadFile(file);
         }
     }, []);
-
-    const copyDownloadUrl = (file: FileResponse) => {
-        navigator.clipboard.writeText(`${FILE_DOWNLOAD_URL}/${file.stored}`);
-    }
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     return (
         <div className={styles.container}>
-            <div className={styles.dropzoneContainer} >
-                <DropZone className={styles.dropzoneWrapper} rootProps={getRootProps()} inputProps={getInputProps()} isDragActive={isDragActive} />
-            </div>
-            <Divider type="horizontal" thickness={1} color="black" />
-            {/* divider */}
-            {/* file list */}
+            <DropZone className={styles.dropzoneContainer} rootProps={getRootProps()} inputProps={getInputProps()} isDragActive={isDragActive} />
+            <ul className={styles.fileItemList}>
+                {
+                    files.map((item) => (
+                        <li key={item.id}>
+                            <FileItem file={item} onClickFile={(file) => copyDownloadUrl(file.fileUUID)} />
+                        </li>
+                    ))
+                }
+            </ul>
         </div>
     )
 }

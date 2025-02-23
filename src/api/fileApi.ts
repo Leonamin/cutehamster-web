@@ -1,11 +1,9 @@
 import axios from "axios";
 import { API_BASE_URL } from '../config';
-export interface FileResponse {
-  original: string;
-  stored: string;
-}
+import { FileResponseDto } from "../1_dto/FileResponseDto";
 
-export const uploadFile = async (file: File) => {
+
+export const uploadFile = async (file: File): Promise<FileResponseDto> => {
   const formData = new FormData();
   formData.append('file', file);
 
@@ -18,8 +16,8 @@ export const uploadFile = async (file: File) => {
 
 
 // 파일 목록 가져오기
-export const getFileList = async (): Promise<FileResponse[]> => {
-  const response = await axios.get<FileResponse[]>(`${API_BASE_URL}/files`);
+export const getFileList = async (): Promise<FileResponseDto[]> => {
+  const response = await axios.get<FileResponseDto[]>(`${API_BASE_URL}/files`);
   return response.data;
 };
 
