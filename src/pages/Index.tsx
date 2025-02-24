@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import styles from "./Index.module.css";
 import { useDropzone } from "react-dropzone";
-import Divider from "../components/layout/Divider";
 import DropZone from "../components/Dropzone/DropZone";
 import useFileUpload from "../hooks/useFileUpload";
 import UploadedFile from "../0_models/UploadedFile";
